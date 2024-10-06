@@ -7,15 +7,13 @@ class Graph:
 
     def add_vertex(self, vertex): # add vertex if not in list and allocate list for it's neighbors
         if vertex not in self.adjacency_list:
-            self.adjacency_list[vertex] = []
+            self.adjacency_list[vertex] = {} 
 
     def add_edge(self, vertex1, vertex2, weight): # add edge (undirected graph)
         if vertex1 in self.adjacency_list and vertex2 in self.adjacency_list:
-            self.adjacency_list[vertex1].append(vertex2)
-            self.adjacency_list[vertex1][vertex2] = weight
-
-            self.adjacency_list[vertex2].append(vertex1)
-            self.adjacency_list[vertex2][vertex1] = weight
+            self.adjacency_list[vertex1].update({vertex2:weight}) # {'A':{'B':1, 'C':2, ...}, ...}
+            
+            self.adjacency_list[vertex2].update({vertex1:weight})
         else:
             print(f'Node {vertex1} or {vertex2} does not exist in graph')
 
@@ -23,26 +21,6 @@ class Graph:
         for vertex in self.adjacency_list:
             print(f'{vertex}: [{self.adjacency_list[vertex]}]\n')
 
-    def bfs (self, start_vertex, end_vertex): # breadth-first search algorithm (find shortest path)
-        visited = set() # list of visited nodes (optimization)
-        queue = deque([start_vertex]) # add first element so start queue from
-        visited.add(start_vertex) 
-        distances = {start_vertex: 0}
-        paths = {start_vertex: [start_vertex]} 
-
-        while queue: 
-            current_vertex = queue.popleft() 
-
-            if current_vertex == end_vertex:
-                return distances[end_vertex], paths[end_vertex]
-
-            for neighbor in self.adjacency_list[current_vertex]: # go through all neighbors for curr node
-                if neighbor not in visited: 
-                    visited.add(neighbor)
-                    queue.append(neighbor)
-                    distances[neighbor] = distances[current_vertex] + 1 # update distance for neighbor 
-                    paths[neighbor] = paths[current_vertex] + [neighbor] # update path to the neighbor
-        return float('inf'), [] 
         
     """
     Diijkstra's algorithm for searching the shortest distances to every node in weighted graph.
@@ -56,9 +34,9 @@ class Graph:
     def dijkstra(self, start_vertex): #FIXME
 
         distances = {node: float('inf') for node in self.adjacency_list} # inf distances to replace with any shorter
-        distances[start] = 0 # start vertex is 0 distance
+        distances[start_vertex] = 0 # start vertex is 0 distance
 
-        queue = deque([start])
+        queue = deque([start_vertex])
 
         while queue:
             current_node = queue.popleft()
@@ -201,14 +179,14 @@ def main():
     graph = Graph()
     
     insert_data(graph)    
-"""
+
     start_station = str(input("\nEnter the landing  station -> "))
-    end_station = str(input("Enter the destination station -> "))
-    distance, path = graph.bfs(start_station, end_station)
-    print(f'\nDistance between {start_station} and {end_station}: {distance} stations\n')
-    print(f'Your route from {start_station} to {end_station}: {path}\n')
+    #end_station = str(input("Enter the destination station -> "))
+    distances = graph.dijkstra(start_station)
+    print(f'Distances from {start_station} to every station: {distances}')
+    
  
-"""
+
 if __name__ == "__main__":
     main()
 

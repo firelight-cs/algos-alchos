@@ -170,6 +170,8 @@ def main():
     
     insert_data(graph)    
 
+    graph.print_graph()
+
     start_station = str(input("\nEnter the landing  station -> "))
     end_station = str(input("Enter the destination station -> "))
     distance, path = graph.bfs(start_station, end_station)
