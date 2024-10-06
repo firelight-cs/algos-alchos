@@ -21,17 +21,8 @@ class Graph:
         for vertex in self.adjacency_list:
             print(f'{vertex}: [{self.adjacency_list[vertex]}]\n')
 
-        
-    """
-    Diijkstra's algorithm for searching the shortest distances to every node in weighted graph.
-    To restore the path we'll use a simple approach of subtraction distance to node and edge weight
-    and compare the result with distance to node and if it matches add to the path.
 
-    Need to reinsert data with weights for every edge 
-    now e.g.: {'A': {'B', 'C', ...}, ...} -> {'A':{'B':1, 'C':2, ...}, ...}
-    """        
-
-    def dijkstra(self, start_vertex): #FIXME
+    def dijkstra(self, start_vertex):
 
         distances = {node: float('inf') for node in self.adjacency_list} # inf distances to replace with any shorter
         distances[start_vertex] = 0 # start vertex is 0 distance
@@ -193,6 +184,15 @@ def insert_data(graph):
     graph.add_edge("Zelivskeho", "Strasnicka", 3)
     graph.add_edge("Strasnicka", "Skalka", 3)
     graph.add_edge("Skalka", "Depo Hostivar", 2)
+
+
+def estim_time(graph, start_station, end_station): #FIXME
+    """
+    Every edge has a weight, which represents amount of segments 500m long. 
+    For example, if edge has a weight 3 than a distance between 2 stations = 3*500=1500m=1.5km
+    """
+    avg_speed = 11 # average speed of metro in Prague ~ 40 km/h ~ 11 m/
+
 
 def main():
     graph = Graph()
