@@ -50,6 +50,25 @@ class Graph:
 
         return distances
 
+    """
+    Need to restore the path and output the whole path
+    """
+
+    def shortest_path(self, distances, start_vertex, end_vertex):
+
+        shortest_path = [end_vertex]
+        dist = distances[end_vertex]
+        current_vertex = end_vertex
+
+        while dist > 0:
+            for neighbor, edge_weight in self.adjacency_list[current_vertex].items():
+                if dist - edge_weight == distances[neighbor]:
+                    dist -= edge_weight
+                    current_vertex = neighbor
+                    shortest_path.append(neighbor)
+        
+        return shortest_path
+
 
 def insert_data(graph):
 # Red Link
@@ -181,11 +200,19 @@ def main():
     insert_data(graph)    
 
     start_station = str(input("\nEnter the landing  station -> "))
-    #end_station = str(input("Enter the destination station -> "))
+    end_station = str(input("Enter the destination station -> "))
+
+
     distances = graph.dijkstra(start_station)
-    print(f'Distances from {start_station} to every station: {distances}')
+    path = graph.shortest_path(distances, start_station, end_station)
     
- 
+    print(f'Distances from {start_station} to every station: {distances}')
+
+    print(f'\nShortest path look like this: ')
+
+    for station in path:
+        print(f'{station}', '-> ')
+
 
 if __name__ == "__main__":
     main()
